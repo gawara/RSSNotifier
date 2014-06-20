@@ -102,8 +102,8 @@ public class RSSNotifier {
 
     private void sendMail(String subject, String contents) throws Exception {
         final Email email = new Email();
-        email.setFromAddress("subconnect", "subconnect@gmail.com");
-        email.addRecipient("takeshi", "subconnect@gmail.com", Message.RecipientType.TO);
+        email.setFromAddress("name", "mail@adress");
+        email.addRecipient("name", "mail@adress", Message.RecipientType.TO);
         email.setSubject(subject);
         email.setText(contents);
         new Mailer(this.smtpAddress, this.smtpPort, this.mailUser, this.mailPass, TransportStrategy.SMTP_TLS).sendMail(email);
