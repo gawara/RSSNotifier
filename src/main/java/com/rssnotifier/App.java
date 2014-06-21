@@ -8,7 +8,7 @@ package com.rssnotifier;
 
 /**
  *
- * @author takeshi
+ * @author gawara
  */
 public class App {
 
@@ -18,7 +18,8 @@ public class App {
             
             RSSNotifier rssNotifier = new RSSNotifier("http://localhost:8080/rssFailed");
             rssNotifier.setMailConfig("smtp.gmail.com", 587, "******@gmail.com", "*****");
-            rssNotifier.setCheckInterval(10000);
+            //rssNotifier.setCheckInterval(5 * 60 * 1000);
+            rssNotifier.setCheckInterval(30000);
             rssNotifier.start();
             
         } catch (Exception e) {

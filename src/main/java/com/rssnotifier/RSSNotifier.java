@@ -72,7 +72,7 @@ public class RSSNotifier {
         String currentPath = new File(".").getAbsolutePath();
         currentPath = currentPath.substring(0, currentPath.length() - 1);
         String xmlFile = currentPath + "rss.xml";
-        Process p = Runtime.getRuntime().exec("\""+currentPath+"ext\\curl.exe\" -o \"" + xmlFile + "\" -L " + this.feedUrl);
+        Process p = Runtime.getRuntime().exec("\"" + currentPath + "ext\\curl\" -o \"" + xmlFile + "\" -L " + this.feedUrl);
         int ret = p.waitFor();
         File file = new File(xmlFile);
         SyndFeedInput input = new SyndFeedInput();
@@ -89,7 +89,17 @@ public class RSSNotifier {
                 break;
             }
             System.out.println("send mail....");
-            //this.sendMail(entry.getTitle().toString(), entry.getLink().toString());
+
+            String title = entry.getTitle().toString();
+            String contents = "Jenkinsでビルドエラーが発生しました。\n"
+                    + "エラー内容を確認して、ビルドを正常な状態に修正する必要があります。\n"
+                    + "\n"
+                    + "エラーが発生したジョブ：\n"
+                    + entry.getTitle().toString() + "\n"
+                    + "URL：\n"
+                    + entry.getLink().toString() + "\n";
+            System.out.println(contents);
+            this.sendMail(title, contents);
             Thread.sleep(10000);
         }
     }
@@ -102,8 +112,8 @@ public class RSSNotifier {
 
     private void sendMail(String subject, String contents) throws Exception {
         final Email email = new Email();
-        email.setFromAddress("subconnect", "subconnect@gmail.com");
-        email.addRecipient("takeshi", "subconnect@gmail.com", Message.RecipientType.TO);
+        email.setFromAddress("fromName", "from_mail@gmail.com");
+        email.addRecipient("toName", "to_mail@gmail.com", Message.RecipientType.TO);
         email.setSubject(subject);
         email.setText(contents);
         new Mailer(this.smtpAddress, this.smtpPort, this.mailUser, this.mailPass, TransportStrategy.SMTP_TLS).sendMail(email);
